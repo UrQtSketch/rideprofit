@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>RideProfit - Delivery Rider Profit Calculator</title>
-  <meta name="description" content="Calculate real take-home profit for Zomato, Swiggy, Blinkit, and Zepto delivery orders by deducting petrol and EV charging costs." />
+  <meta name="description" content="Calculate real take-home profit for Zomato, Swiggy, Blinkit, and Zepto delivery orders by deducting petrol and EV charging costs. Created by Deepak." />
+  <meta name="author" content="Deepak" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,7 +26,6 @@
       --accent-red: #e74c3c;
       --accent-red-soft: rgba(231, 76, 60, 0.18);
       --accent-blue: #3498db;
-      --zomato-red: #e23744;
       --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
@@ -43,7 +43,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 16px 12px 60px;
+      padding: 16px 12px 40px;
     }
 
     .app-container {
@@ -57,7 +57,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 4px 18px;
+      padding: 10px 4px 16px;
     }
 
     .brand {
@@ -67,15 +67,15 @@
     }
 
     .brand-icon {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       background: linear-gradient(135deg, #2ecc71, #1abc9c);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 22px;
-      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
+      box-shadow: 0 4px 14px rgba(46, 204, 113, 0.25);
     }
 
     .brand-text h1 {
@@ -89,10 +89,24 @@
       color: var(--accent-green);
     }
 
-    .brand-text p {
+    .brand-author {
       font-size: 11px;
       color: var(--text-muted);
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .creator-tag {
+      background: rgba(46, 204, 113, 0.12);
+      color: var(--accent-green);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 10px;
+      border: 1px solid rgba(46, 204, 113, 0.25);
     }
 
     .settings-btn {
@@ -720,13 +734,64 @@
       color: var(--text-sub);
     }
 
-    /* Footer */
+    /* Enhanced Footer */
     footer {
+      margin-top: 30px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 20px;
       text-align: center;
-      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-creator {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-inner);
+      padding: 6px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--card-border);
+    }
+
+    .footer-creator strong {
+      color: var(--accent-green);
+    }
+
+    .footer-platforms {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-green);
+      text-decoration: underline;
+    }
+
+    .footer-copyright {
       font-size: 11px;
       color: var(--text-sub);
-      line-height: 1.6;
+      margin-top: 2px;
     }
 
     /* Toast Notification */
@@ -750,6 +815,89 @@
     .toast.show {
       transform: translateX(-50%) translateY(0);
     }
+
+    /* Modal (Terms of Service / Disclaimer) */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      padding: 18px;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-body {
+      padding: 18px 20px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-body h4 {
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .modal-body p {
+      margin-bottom: 4px;
+    }
+
+    .modal-body ul {
+      padding-left: 20px;
+    }
+
+    .modal-body li {
+      margin-bottom: 4px;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--card-border);
+      background: var(--card-inner);
+    }
   </style>
 </head>
 <body>
@@ -761,7 +909,9 @@
         <div class="brand-icon">⚡</div>
         <div class="brand-text">
           <h1>Ride<span>Profit</span></h1>
-          <p>Order Asli Munafa Calculator</p>
+          <div class="brand-author">
+            Order Profit Calculator <span class="creator-tag">By Deepak</span>
+          </div>
         </div>
       </div>
       <button class="settings-btn" id="toggleSettingsBtn" onclick="toggleSettings()">
@@ -998,15 +1148,48 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer with Creator, Copyright, and Terms -->
     <footer>
-      RideProfit · Har delivery rider ke asli haq aur bachat ke liye.<br>
-      Zomato · Swiggy · Blinkit · Zepto · Porter
+      <div class="footer-creator">
+        <span>🚀 Created by <strong>Deepak</strong></span>
+      </div>
+      <div class="footer-platforms">
+        Built for Zomato · Swiggy · Blinkit · Zepto · Porter Delivery Riders
+      </div>
+      <div class="footer-links">
+        <a onclick="openModal('terms')">Terms of Service</a>
+        <span>·</span>
+        <a onclick="openModal('disclaimer')">Disclaimer</a>
+        <span>·</span>
+        <a onclick="openModal('privacy')">Privacy Policy</a>
+      </div>
+      <div class="footer-copyright">
+        © 2026 RideProfit. All Rights Reserved. Created by Deepak.
+      </div>
     </footer>
 
   </div>
 
+  <!-- Toast Notification -->
   <div class="toast" id="toast">Order save ho gaya!</div>
+
+  <!-- Terms & Disclaimer Modal -->
+  <div class="modal-backdrop" id="legalModal" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">📄 Terms of Service</h3>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        <!-- Dynamic content injected by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-save" style="width: 100%;" onclick="closeModal()">
+          Theek Hai / Samajh Gaya
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // --- Application State ---
@@ -1236,8 +1419,6 @@
 
     function renderShiftHistory() {
       const list = document.getElementById('historyList');
-      const empty = document.getElementById('emptyState');
-
       let totalPayout = 0;
       let totalCost = 0;
       let totalProfit = 0;
@@ -1298,6 +1479,78 @@
         toast.classList.remove('show');
       }, 2400);
     }
+
+    // Modal Manager
+    const modalContents = {
+      terms: {
+        title: '📜 Terms of Service',
+        body: `
+          <h4>1. Acceptance of Terms</h4>
+          <p>By accessing or using <strong>RideProfit</strong> (created by Deepak), you agree to these Terms of Service. If you do not agree, please do not use this application.</p>
+          
+          <h4>2. Purpose of the Tool</h4>
+          <p>RideProfit is a free calculation utility designed to help gig workers and food delivery riders estimate running expenses (fuel, wear-and-tear) and net profit per delivery order.</p>
+
+          <h4>3. No Guarantee of Earnings</h4>
+          <p>Results provided by this tool are mathematical approximations based strictly on the figures entered by the user. RideProfit and its creator (Deepak) make no representation or warranty regarding actual earnings, delivery bonuses, or platform incentives.</p>
+
+          <h4>4. Road & Personal Safety</h4>
+          <p><strong>Safety First:</strong> Never interact with this application or mobile screens while operating a two-wheeler, four-wheeler, or any moving vehicle. Always stop and safely park your vehicle before viewing or inputting order details.</p>
+
+          <h4>5. Intellectual Property</h4>
+          <p>© 2026 RideProfit. All software, designs, algorithms, and interface elements are created by <strong>Deepak</strong>. All rights reserved.</p>
+        `
+      },
+      disclaimer: {
+        title: '⚠️ Disclaimer & Platform Notice',
+        body: `
+          <h4>1. Non-Affiliation Notice</h4>
+          <p>RideProfit is an independent third-party tool developed by <strong>Deepak</strong>. It is <strong>NOT affiliated, associated, authorized, endorsed by, or in any way officially connected</strong> with Zomato Limited, Swiggy (Bundl Technologies Pvt Ltd), Blinkit, Zepto, Porter, Uber Eats, or any of their subsidiaries.</p>
+
+          <h4>2. Accuracy of Estimations</h4>
+          <p>Fuel consumption rates, traffic delays, vehicle condition, tyre friction, and fluctuating petrol rates may cause real-world expenses to vary. Calculations are intended as guidance only.</p>
+
+          <h4>3. Limitation of Liability</h4>
+          <p>Under no circumstances shall the developer (Deepak) be liable for any direct, indirect, incidental, or consequential damages resulting from order decisions made using this calculator.</p>
+        `
+      },
+      privacy: {
+        title: '🔒 Privacy Policy',
+        body: `
+          <h4>1. Zero Data Collection</h4>
+          <p>Your privacy is respected. RideProfit does <strong>not</strong> collect, track, share, or store your personal delivery data, location, or financial numbers on any remote servers.</p>
+
+          <h4>2. Local Device Storage (Offline First)</h4>
+          <p>All vehicle settings (petrol price, mileage) and shift order history are stored purely inside your own phone browser using standard HTML5 <code>localStorage</code>. Clearing your browser data will erase this saved history.</p>
+
+          <h4>3. Contact & Creator</h4>
+          <p>This tool is crafted by <strong>Deepak</strong> to empower delivery partners with transparent financial clarity.</p>
+        `
+      }
+    };
+
+    function openModal(type) {
+      const modal = document.getElementById('legalModal');
+      const data = modalContents[type] || modalContents['terms'];
+      document.getElementById('modalTitle').textContent = data.title;
+      document.getElementById('modalContent').innerHTML = data.body;
+      modal.classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('legalModal').classList.remove('open');
+    }
+
+    function closeModalOnBackdrop(e) {
+      if (e.target.id === 'legalModal') {
+        closeModal();
+      }
+    }
+
+    // Escape key closes modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
 
     // Initialize on load
     window.addEventListener('DOMContentLoaded', loadSavedData);
