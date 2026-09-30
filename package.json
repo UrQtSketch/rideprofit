@@ -1,0 +1,19 @@
+{
+  "name": "rideprofit",
+  "version": "1.0.0",
+  "description": "Zomato & Swiggy Delivery Rider Profit & Petrol Calculator by Deepak",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test_suite.js"
+  },
+  "keywords": [
+    "zomato",
+    "swiggy",
+    "delivery",
+    "profit",
+    "calculator"
+  ],
+  "author": "Deepak",
+  "license": "ISC"
+}

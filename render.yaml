@@ -1,6 +1,10 @@
 services:
   - type: web
     name: rideprofit
-    env: static
+    runtime: node
+    plan: free
     buildCommand: ""
-    staticPublishPath: .
+    startCommand: "node server.js"
+    envVars:
+      - key: NODE_VERSION
+        value: 20
