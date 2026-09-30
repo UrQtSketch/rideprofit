@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: rideprofit
+    env: static
+    buildCommand: ""
+    staticPublishPath: .
