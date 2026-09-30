@@ -1198,8 +1198,8 @@
         <div class="voice-left">
           <span>🔊</span>
           <div>
-            <div>Voice Alert (Awaz)</div>
-            <small style="font-size: 10px; color: var(--text-muted); font-weight: 500;" id="voiceStatusSub">Ladki ki awaz me order advice</small>
+            <div>Pyaari Hindi Voice (Awaz)</div>
+            <small style="font-size: 10px; color: var(--text-muted); font-weight: 500;" id="voiceStatusSub">Ladki ki meethi awaz me order advice</small>
           </div>
         </div>
         <div class="voice-actions">
@@ -1387,51 +1387,93 @@
     }
 
     // Find crisp female voice
-    function getFemaleVoice() {
+    // Find sweet Hindi female voice
+    function getSweetHindiVoice() {
       if (!availableVoices.length) loadVoices();
       
-      // Preferred female voices across Windows, Android, iOS, ChromeOS
-      const femaleVoice = availableVoices.find(v => {
+      // 1. Natural / Online Hindi Female Voices (Most realistic & sweet)
+      let voice = availableVoices.find(v => {
         const name = (v.name || '').toLowerCase();
-        return (
-          name.includes('zira') ||           // Windows default female
-          name.includes('female') ||         // Generic label
-          name.includes('samantha') ||       // iOS/macOS female
-          name.includes('karen') ||          // Australian female
-          name.includes('victoria') ||       // UK female
-          name.includes('moira') ||
-          (v.lang === 'en-IN' && !name.includes('male')) ||
-          (name.includes('google') && name.includes('english') && !name.includes('male'))
-        );
+        const lang = (v.lang || '').toLowerCase();
+        return (lang.includes('hi') || lang.includes('in')) && 
+          (name.includes('swara') || name.includes('lekha') || name.includes('kalpana') || name.includes('kavya') || (name.includes('google') && name.includes('हिन्दी')));
       });
 
-      return femaleVoice || availableVoices.find(v => (v.lang || '').startsWith('en')) || availableVoices[0] || null;
+      // 2. Any Hindi female voice
+      if (!voice) {
+        voice = availableVoices.find(v => {
+          const name = (v.name || '').toLowerCase();
+          const lang = (v.lang || '').toLowerCase();
+          return lang.startsWith('hi') && !name.includes('male') && !name.includes('madhav') && !name.includes('hemant');
+        });
+      }
+
+      // 3. Any Hindi voice
+      if (!voice) {
+        voice = availableVoices.find(v => (v.lang || '').toLowerCase().startsWith('hi'));
+      }
+
+      // 4. Indian English Female (Neerja, Heera, etc.) as high quality fallback
+      if (!voice) {
+        voice = availableVoices.find(v => {
+          const name = (v.name || '').toLowerCase();
+          const lang = (v.lang || '').toLowerCase();
+          return lang.includes('en-in') && (name.includes('neerja') || name.includes('female') || !name.includes('male'));
+        });
+      }
+
+      // 5. Generic female voice fallback
+      if (!voice) {
+        voice = availableVoices.find(v => {
+          const name = (v.name || '').toLowerCase();
+          return name.includes('female') || name.includes('zira') || name.includes('samantha');
+        });
+      }
+
+      return voice || availableVoices[0] || null;
     }
 
-    // Voice speaking logic with user's exact strings
+    // Voice speaking logic in sweet Hindi female voice
     function speakVerdict(category, force = false) {
       if (!config.voiceAlerts && !force) return;
       if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
       try {
-        window.speechSynthesis.cancel(); // Cancel any overlapping speech
+        window.speechSynthesis.cancel(); // Stop any pending speech
+
+        const voice = getSweetHindiVoice();
+        const isHindiVoice = voice && voice.lang && voice.lang.toLowerCase().startsWith('hi');
 
         let text = '';
-        if (category === 'good') {
-          text = 'Profit is good, take the order!';
-        } else if (category === 'low') {
-          text = 'Profit is too low!';
-        } else if (category === 'bad') {
-          text = 'Profit is too low, loss order!';
+        if (isHindiVoice) {
+          // Pure Devanagari Hindi for authentic, sweet, natural pronunciation
+          if (category === 'good') {
+            text = 'ऑर्डर बहुत बढ़िया है! अच्छा मुनाफ़ा होगा, ऑर्डर ले लीजिए।';
+          } else if (category === 'low') {
+            text = 'इस ऑर्डर में मुनाफ़ा बहुत कम है, सोच समझकर लीजिए।';
+          } else if (category === 'bad') {
+            text = 'इस ऑर्डर में नुक़सान होगा, मत लीजिए!';
+          } else {
+            return;
+          }
         } else {
-          return;
+          // Romanized Hindi phonetics for English/International voices so they pronounce Hindi sweetly
+          if (category === 'good') {
+            text = 'Order bohot badhiya hai! Achha munafa hoga, order le lijiye.';
+          } else if (category === 'low') {
+            text = 'Is order me munafa bohot kam hai, soch samajhkar lijiye.';
+          } else if (category === 'bad') {
+            text = 'Is order me nuksaan hoga, mat lijiye!';
+          } else {
+            return;
+          }
         }
 
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.25; // Distinct, clear female pitch
+        utterance.lang = isHindiVoice ? 'hi-IN' : (voice?.lang || 'en-IN');
+        utterance.rate = 0.92; // Sweet, gentle, polite pace
+        utterance.pitch = 1.15; // Soft, warm, pleasant female pitch
 
-        const voice = getFemaleVoice();
         if (voice) {
           utterance.voice = voice;
         }

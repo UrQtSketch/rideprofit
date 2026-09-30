@@ -127,32 +127,33 @@ test('100 Dynamic Calculation Permutations (Zero crashes, valid numbers)', () =>
 });
 
 // -------------------------------------------------------------
-// SECTION 2: Voice Alert & Speech Synthesis Verification
+// SECTION 2: Voice Assistant Logic & Speech Strings (Sweet Hindi Female Voice)
 // -------------------------------------------------------------
-console.log('\n[SECTION 2] Verifying Voice Assistant Logic & Speech Strings...');
+console.log('\n[SECTION 2] Verifying Sweet Hindi Female Voice Assistant Logic...');
 
 const html = fs.readFileSync('index.html', 'utf-8');
 
-test('Female Voice Message for Good Profit: "Profit is good, take the order!"', () => {
-  assert(html.includes("text = 'Profit is good, take the order!';"), 'Exact match for good profit voice message');
+test('Sweet Hindi Female Message for Good Profit: "ऑर्डर बहुत बढ़िया है! अच्छा मुनाफ़ा होगा, ऑर्डर ले लीजिए।"', () => {
+  assert(html.includes("text = 'ऑर्डर बहुत बढ़िया है! अच्छा मुनाफ़ा होगा, ऑर्डर ले लीजिए।';"), 'Exact match for good profit Hindi voice message');
 });
 
-test('Female Voice Message for Low Profit: "Profit is too low!"', () => {
-  assert(html.includes("text = 'Profit is too low!';"), 'Exact match for low profit voice message');
+test('Sweet Hindi Female Message for Low Profit: "इस ऑर्डर में मुनाफ़ा बहुत कम है, सोच समझकर लीजिए।"', () => {
+  assert(html.includes("text = 'इस ऑर्डर में मुनाफ़ा बहुत कम है, सोच समझकर लीजिए।';"), 'Exact match for low profit Hindi voice message');
 });
 
-test('Female Voice Message for Loss Order: "Profit is too low, loss order!"', () => {
-  assert(html.includes("text = 'Profit is too low, loss order!';"), 'Exact match for loss order voice message');
+test('Sweet Hindi Female Message for Loss Order: "इस ऑर्डर में नुक़सान होगा, मत लीजिए!"', () => {
+  assert(html.includes("text = 'इस ऑर्डर में नुक़सान होगा, मत लीजिए!';"), 'Exact match for loss order Hindi voice message');
 });
 
-test('Female Voice Pitch Optimization (1.25 pitch for natural crisp female voice)', () => {
-  assert(html.includes('utterance.pitch = 1.25;'), 'Pitch set to 1.25');
+test('Natural Sweet Female Voice Parameters (Rate 0.92, Pitch 1.15)', () => {
+  assert(html.includes('utterance.rate = 0.92;'), 'Gentle rate set to 0.92');
+  assert(html.includes('utterance.pitch = 1.15;'), 'Soft sweet pitch set to 1.15');
 });
 
-test('Female Voice Detection Filter (Zira, Samantha, Karen, Victoria, Natural)', () => {
-  assert(html.includes('name.includes(\'zira\')'), 'Checks for Windows Zira female voice');
-  assert(html.includes('name.includes(\'samantha\')'), 'Checks for Apple Samantha female voice');
-  assert(html.includes('name.includes(\'female\')'), 'Checks for generic female voice label');
+test('Hindi Female Voice Priority Filter (Swara, Lekha, Kalpana, Kavya, Google हिन्दी)', () => {
+  assert(html.includes('name.includes(\'swara\')'), 'Checks for Microsoft Swara online Hindi female voice');
+  assert(html.includes('name.includes(\'lekha\')'), 'Checks for Apple Lekha Hindi female voice');
+  assert(html.includes('name.includes(\'हिन्दी\')'), 'Checks for Google Android Hindi female voice');
 });
 
 test('Voice Toggle Switch & Controls exist in DOM', () => {
