@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>RideProfit - Delivery Rider Profit Calculator</title>
-  <meta name="description" content="Calculate real take-home profit for Zomato, Swiggy, Blinkit, and Zepto delivery orders by deducting petrol and EV charging costs. Created by Deepak." />
+  <meta name="description" content="Calculate real take-home profit for Zomato, Swiggy, Blinkit, and Zepto delivery orders by deducting petrol and EV charging costs with voice alerts. Created by Deepak." />
   <meta name="author" content="Deepak" />
-  <meta name="theme-color" content="#0f1412" />
+  <meta name="theme-color" content="#0d1210" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
@@ -422,12 +422,12 @@
       transform: scale(0.95);
     }
 
-    /* Large Touch Toggles */
+    /* Large Touch Toggles (3-Way: Wapsi, Service, Voice) */
     .toggles-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .toggle-card {
@@ -511,6 +511,59 @@
       background-color: #0b1510;
     }
 
+    /* Voice Bar Option */
+    .voice-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+    }
+
+    .voice-bar.active {
+      border-color: var(--accent-green-border);
+    }
+
+    .voice-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .voice-left span {
+      font-size: 16px;
+    }
+
+    .voice-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-test-voice {
+      background: rgba(0, 230, 118, 0.12);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+      color: var(--accent-green);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-test-voice:active {
+      background: var(--accent-green);
+      color: #08110b;
+    }
+
     /* Result Box (High Contrast for Daytime / Sunlight) */
     .result-box {
       background: linear-gradient(180deg, #1b2620 0%, #131d17 100%);
@@ -551,6 +604,12 @@
       color: var(--text-muted);
     }
 
+    .verdict-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .verdict-badge {
       display: inline-flex;
       align-items: center;
@@ -578,6 +637,24 @@
       background: var(--accent-red-soft);
       color: var(--accent-red);
       border: 1px solid rgba(255, 56, 56, 0.4);
+    }
+
+    .btn-speak-now {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: 99px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-speak-now:active {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .profit-display {
@@ -1052,7 +1129,7 @@
         </div>
         <div class="input-wrapper">
           <span class="input-prefix">₹</span>
-          <input type="number" inputmode="decimal" id="payoutInput" class="main-input" placeholder="60" value="60" oninput="calculateProfit()" autocomplete="off" />
+          <input type="number" inputmode="decimal" id="payoutInput" class="main-input" placeholder="60" value="60" oninput="calculateProfit(true)" autocomplete="off" />
           <button class="clear-field-btn" onclick="clearField('payoutInput')">✕</button>
         </div>
         <div class="chip-row">
@@ -1072,7 +1149,7 @@
           <span class="input-subtext">Pickup + Drop total km</span>
         </div>
         <div class="input-wrapper">
-          <input type="number" inputmode="decimal" id="distanceInput" class="main-input has-suffix" placeholder="8" value="8" step="0.5" oninput="calculateProfit()" autocomplete="off" />
+          <input type="number" inputmode="decimal" id="distanceInput" class="main-input has-suffix" placeholder="8" value="8" step="0.5" oninput="calculateProfit(true)" autocomplete="off" />
           <span class="input-suffix">km</span>
           <button class="clear-field-btn" onclick="clearField('distanceInput')">✕</button>
         </div>
@@ -1113,13 +1190,38 @@
         </div>
       </div>
 
+      <!-- Voice Assistant Alert Bar -->
+      <div class="voice-bar active" id="voiceBar">
+        <div class="voice-left">
+          <span>🔊</span>
+          <div>
+            <div>Voice Alert (Awaz)</div>
+            <small style="font-size: 10px; color: var(--text-muted); font-weight: 500;" id="voiceStatusSub">Ladki ki awaz me order advice</small>
+          </div>
+        </div>
+        <div class="voice-actions">
+          <button class="btn-test-voice" onclick="playCurrentVoiceVerdict()" title="Voice test karein">
+            ▶️ Suno
+          </button>
+          <div class="switch">
+            <input type="checkbox" id="voiceToggle" checked onchange="toggleVoiceAlert()">
+            <span class="slider"></span>
+          </div>
+        </div>
+      </div>
+
       <!-- Results Display (Sunlight High Contrast) -->
       <div class="result-box status-good" id="resultCard">
         <div class="result-header">
           <span class="result-label">Aapka Asli Munafa</span>
-          <span class="verdict-badge badge-good" id="verdictBadge">
-            <span>👍</span> SHANDAR ORDER
-          </span>
+          <div class="verdict-row">
+            <button class="btn-speak-now" onclick="playCurrentVoiceVerdict()" title="Awaz sune">
+              <span>🔊</span> Voice
+            </button>
+            <span class="verdict-badge badge-good" id="verdictBadge">
+              <span>👍</span> SHANDAR ORDER
+            </span>
+          </div>
         </div>
 
         <div class="profit-display">
@@ -1261,10 +1363,86 @@
       evRange: 80,
       maintRate: 1.5,
       includeMaint: false,
-      returnTrip: false
+      returnTrip: false,
+      voiceAlerts: true
     };
 
     let shiftOrders = [];
+    let currentVerdictCategory = 'good'; // 'good', 'low', 'bad'
+    let voiceDebounceTimer = null;
+    let availableVoices = [];
+
+    // Preload & Cache Browser Voices for Female Selection
+    function loadVoices() {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        availableVoices = window.speechSynthesis.getVoices();
+      }
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // Find crisp female voice
+    function getFemaleVoice() {
+      if (!availableVoices.length) loadVoices();
+      
+      // Preferred female voices across Windows, Android, iOS, ChromeOS
+      const femaleVoice = availableVoices.find(v => {
+        const name = (v.name || '').toLowerCase();
+        return (
+          name.includes('zira') ||           // Windows default female
+          name.includes('female') ||         // Generic label
+          name.includes('samantha') ||       // iOS/macOS female
+          name.includes('karen') ||          // Australian female
+          name.includes('victoria') ||       // UK female
+          name.includes('moira') ||
+          (v.lang === 'en-IN' && !name.includes('male')) ||
+          (name.includes('google') && name.includes('english') && !name.includes('male'))
+        );
+      });
+
+      return femaleVoice || availableVoices.find(v => (v.lang || '').startsWith('en')) || availableVoices[0] || null;
+    }
+
+    // Voice speaking logic with user's exact strings
+    function speakVerdict(category, force = false) {
+      if (!config.voiceAlerts && !force) return;
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+      try {
+        window.speechSynthesis.cancel(); // Cancel any overlapping speech
+
+        let text = '';
+        if (category === 'good') {
+          text = 'Profit is good, take the order!';
+        } else if (category === 'low') {
+          text = 'Profit is too low!';
+        } else if (category === 'bad') {
+          text = 'Profit is too low, loss order!';
+        } else {
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.25; // Distinct, clear female pitch
+
+        const voice = getFemaleVoice();
+        if (voice) {
+          utterance.voice = voice;
+        }
+
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.error('Speech synthesis error:', err);
+      }
+    }
+
+    function playCurrentVoiceVerdict() {
+      triggerHaptic(20);
+      speakVerdict(currentVerdictCategory, true);
+    }
 
     function triggerHaptic(duration = 20) {
       if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -1288,7 +1466,7 @@
       }
       applyConfigToUI();
       renderShiftHistory();
-      calculateProfit();
+      calculateProfit(false); // Don't speak on initial page load
     }
 
     // Apply config state to DOM inputs
@@ -1300,6 +1478,12 @@
       document.getElementById('maintRate').value = config.maintRate;
       document.getElementById('maintLabelText').textContent = `₹${config.maintRate}/km reserve`;
       
+      const vToggle = document.getElementById('voiceToggle');
+      if (vToggle) {
+        vToggle.checked = config.voiceAlerts;
+        document.getElementById('voiceBar').classList.toggle('active', config.voiceAlerts);
+      }
+
       setVehicleType(config.vehicleType, false);
       updateVehicleIndicatorText();
     }
@@ -1318,6 +1502,22 @@
       const panel = document.getElementById('settingsPanel');
       panel.classList.toggle('open');
       document.getElementById('toggleSettingsBtn').classList.toggle('active');
+    }
+
+    function toggleVoiceAlert() {
+      triggerHaptic(20);
+      const chk = document.getElementById('voiceToggle');
+      config.voiceAlerts = chk.checked;
+      document.getElementById('voiceBar').classList.toggle('active', config.voiceAlerts);
+
+      try {
+        localStorage.setItem('rideprofit_config', JSON.stringify(config));
+      } catch (e) {}
+
+      showToast(config.voiceAlerts ? '🔊 Voice Alert Chalu Ho Gaya!' : '🔇 Voice Alert Band Kar Diya');
+      if (config.voiceAlerts) {
+        speakVerdict('good', true);
+      }
     }
 
     function setVehicleType(type, triggerCalc = true) {
@@ -1359,19 +1559,19 @@
       } catch (e) {}
 
       updateVehicleIndicatorText();
-      calculateProfit();
+      calculateProfit(false);
     }
 
     function setPayout(val) {
       triggerHaptic(20);
       document.getElementById('payoutInput').value = val;
-      calculateProfit();
+      calculateProfit(true);
     }
 
     function setDistance(val) {
       triggerHaptic(20);
       document.getElementById('distanceInput').value = val;
-      calculateProfit();
+      calculateProfit(true);
     }
 
     function clearField(id) {
@@ -1379,7 +1579,7 @@
       const el = document.getElementById(id);
       el.value = '';
       el.focus();
-      calculateProfit();
+      calculateProfit(false);
     }
 
     function resetForm() {
@@ -1391,7 +1591,7 @@
       document.getElementById('cardReturn').classList.remove('active');
       document.getElementById('cardMaint').classList.remove('active');
       document.getElementById('payoutInput').focus();
-      calculateProfit();
+      calculateProfit(false);
     }
 
     function toggleReturnTrip() {
@@ -1399,7 +1599,7 @@
       const chk = document.getElementById('returnToggle');
       chk.checked = !chk.checked;
       document.getElementById('cardReturn').classList.toggle('active', chk.checked);
-      calculateProfit();
+      calculateProfit(true);
     }
 
     function toggleMaintReserve() {
@@ -1407,11 +1607,11 @@
       const chk = document.getElementById('maintToggle');
       chk.checked = !chk.checked;
       document.getElementById('cardMaint').classList.toggle('active', chk.checked);
-      calculateProfit();
+      calculateProfit(true);
     }
 
     // Main Profit Calculation Logic
-    function calculateProfit() {
+    function calculateProfit(triggerVoice = false) {
       const payout = parseFloat(document.getElementById('payoutInput').value) || 0;
       let rawDistance = parseFloat(document.getElementById('distanceInput').value) || 0;
       const isReturn = document.getElementById('returnToggle').checked;
@@ -1460,6 +1660,7 @@
       const verdict = document.getElementById('verdictBadge');
 
       if (netProfit < 0) {
+        currentVerdictCategory = 'bad';
         netDisplay.textContent = `-₹${Math.abs(netProfit).toFixed(2)}`;
         netDisplay.className = 'profit-amount val-bad';
         resultCard.className = 'result-box status-bad';
@@ -1467,6 +1668,7 @@
         verdict.innerHTML = '<span>❌</span> NUKSAN / CHHOD DO';
         document.getElementById('profitSubText').textContent = 'is order me jeb se paise lagenge!';
       } else if (perKm < 3.5 || netProfit < 15) {
+        currentVerdictCategory = 'low';
         netDisplay.textContent = `₹${netProfit.toFixed(2)}`;
         netDisplay.className = 'profit-amount val-average';
         resultCard.className = 'result-box status-average';
@@ -1474,6 +1676,7 @@
         verdict.innerHTML = '<span>⚠️</span> SOCH KE LO (Low Profit)';
         document.getElementById('profitSubText').textContent = 'bachat kam hai';
       } else {
+        currentVerdictCategory = 'good';
         netDisplay.textContent = `₹${netProfit.toFixed(2)}`;
         netDisplay.className = 'profit-amount val-good';
         resultCard.className = 'result-box status-good';
@@ -1488,6 +1691,14 @@
       document.getElementById('perKmProfit').textContent = `₹${perKm.toFixed(2)}/km`;
       document.getElementById('effectiveDistanceDisplay').textContent = `${distance.toFixed(1)} km${isReturn ? ' (2x)' : ''}`;
       document.getElementById('estTimeDisplay').textContent = estMinutes > 0 ? `~${estMinutes} min` : '0 min';
+
+      // Trigger Debounced Voice Alert if requested (after typing stops or chip tap)
+      if (triggerVoice && payout > 0 && rawDistance > 0) {
+        if (voiceDebounceTimer) clearTimeout(voiceDebounceTimer);
+        voiceDebounceTimer = setTimeout(() => {
+          speakVerdict(currentVerdictCategory);
+        }, 700);
+      }
 
       return {
         payout,
@@ -1504,7 +1715,7 @@
     // Shift Tracking
     function saveOrderToShift() {
       triggerHaptic(30);
-      const calc = calculateProfit();
+      const calc = calculateProfit(false);
       if (!calc || calc.payout === 0) {
         showToast('Pehle Payout aur Distance daalein!');
         return;
@@ -1592,7 +1803,7 @@
           <p>By accessing or using <strong>RideProfit</strong> (created by Deepak), you agree to these Terms of Service. If you do not agree, please do not use this application.</p>
           
           <h4>2. Purpose of the Tool</h4>
-          <p>RideProfit is a free calculation utility designed to help gig workers and food delivery riders estimate running expenses (fuel, wear-and-tear) and net profit per delivery order.</p>
+          <p>RideProfit is a free calculation utility designed to help gig workers and food delivery riders estimate running expenses (fuel, wear-and-tear) and net profit per delivery order with audio alert guidance.</p>
 
           <h4>3. No Guarantee of Earnings</h4>
           <p>Results provided by this tool are mathematical approximations based strictly on the figures entered by the user. RideProfit and its creator (Deepak) make no representation or warranty regarding actual earnings, delivery bonuses, or platform incentives.</p>
