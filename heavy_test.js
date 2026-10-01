@@ -71,6 +71,19 @@ test('User Prompt Scenario: ₹60 payout, 8 km on Petrol Bike (₹96/L, 45km/L)'
   assertEq(res.category, 'good', 'Verdict category must be good');
 });
 
+// 1.1b User New Feature: Pickup (2.5 km) + Delivery (5 km) = 7.5 km Total
+test('Pickup + Delivery Distance: 2.5km + 5.0km = 7.5km, Petrol ₹96/L, Mileage 45km/L -> Fuel ₹16.00, Profit ₹44.00', () => {
+  const pickup = 2.5;
+  const delivery = 5.0;
+  const totalDist = pickup + delivery;
+  assertEq(totalDist, 7.5, 'Total distance must be 7.5 km');
+  const res = calculate(60, totalDist, false, false, 'petrol', 96, 45, 0.35, 1.5);
+  assertEq(res.fuelCost.toFixed(2), '16.00', 'Automatic fuel cost must be exactly ₹16.00');
+  assertEq(res.netProfit.toFixed(2), '44.00', 'Net profit must be exactly ₹44.00');
+  assertEq(res.perKm.toFixed(2), '5.87', 'Per km rate must be ₹5.87/km');
+  assertEq(res.category, 'good', 'Verdict category must be good');
+});
+
 // 1.2 Exact user example with EV Mode
 test('EV Mode Scenario: ₹60 payout, 8 km at ₹0.35/km charging cost', () => {
   const res = calculate(60, 8, false, false, 'ev', 96, 45, 0.35, 1.5);
@@ -160,6 +173,21 @@ test('Voice Toggle Switch & Controls exist in DOM', () => {
   assert(html.includes('id="voiceToggle"'), 'voiceToggle input exists');
   assert(html.includes('btn-test-voice'), 'Test Voice button exists');
   assert(html.includes('btn-speak-now'), 'Direct Voice button on result card exists');
+});
+
+test('Pickup + Delivery Distance Controls exist in DOM', () => {
+  assert(html.includes('id="pickupDistance"'), 'pickupDistance input exists');
+  assert(html.includes('id="deliveryDistance"'), 'deliveryDistance input exists');
+  assert(html.includes('id="totalDistBadgeVal"'), 'totalDistBadgeVal display exists');
+  assert(html.includes('id="sumPickupVal"'), 'sumPickupVal exists');
+  assert(html.includes('id="sumDeliveryVal"'), 'sumDeliveryVal exists');
+});
+
+test('Fuel Cost & Automatic Calculation Controls exist in DOM', () => {
+  assert(html.includes('id="quickPetrolRate"'), 'quickPetrolRate input exists');
+  assert(html.includes('id="quickPetrolMileage"'), 'quickPetrolMileage input exists');
+  assert(html.includes('id="autoFuelBadgeVal"'), 'autoFuelBadgeVal display exists');
+  assert(html.includes('id="autoFuelFormulaText"'), 'autoFuelFormulaText display exists');
 });
 
 // -------------------------------------------------------------
